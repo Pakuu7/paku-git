@@ -60,24 +60,68 @@
 			</button>
 		</form>
 	</div>
-</section>
-<script>
-	document.getElementById('contactForm').addEventListener('submit', function (e) {
-		e.preventDefault()
+	<script>
+		document.getElementById('contactForm').addEventListener('submit', function (e) {
+			e.preventDefault()
 
-		const name = document.getElementById('name').value.trim()
-		const surname = document.getElementById('surname').value.trim()
-		const email = document.getElementById('email').value.trim()
-		const phone = document.getElementById('phone').value.trim()
-		const message = document.getElementById('message').value.trim()
+			// Pobieranie pól formularza
+			const nameField = document.getElementById('name')
+			const emailField = document.getElementById('email')
+			const phoneField = document.getElementById('phone')
+			const messageField = document.getElementById('message')
 
-		if (!name || !email || !message) {
-			alert('Please fill in all required fields.')
-			return
+			// Pobieranie wartości
+			const name = nameField.value.trim()
+			const email = emailField.value.trim()
+			const phone = phoneField.value.trim()
+			const message = messageField.value.trim()
+
+			// Czyszczenie poprzednich błędów
+			clearErrors()
+
+			// Flaga poprawności formularza
+			let isValid = true
+
+			// Walidacja imienia
+			if (!name || name.length < 3) {
+				showError(nameField, 'Name must be at least 3 characters long.')
+				isValid = false
+			}
+
+			// Walidacja emaila
+			if (!email || !isValidEmail(email)) {
+				showError(emailField, 'Please enter a valid email address.')
+				isValid = false
+			}
+
+			// Walidacja telefonu (opcjonalne pole)
+			if (phone && !isValidPhone(phone)) {
+				showError(phoneField, 'Phone number must be in a valid format.')
+				isValid = false
+			}
+
+			// Walidacja wiadomości
+			if (!message || message.length < 10) {
+				showError(messageField, 'Message must be at least 10 characters long.')
+				isValid = false
+			}
+
+			// Jeśli wszystkie pola są poprawne
+			if (isValid) {
+				console.log('Form submitted:', { name, email, phone, message })
+				alert('Your message has been sent!')
+				this.reset() // Resetowanie formularza
+			}
+		})
+
+		// Funkcja do sprawdzania poprawności emaila
+		function isValidEmail(email) {
+			const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/
+			return emailRegex.test(email)
 		}
 
 		console.log('Form submitted:', { name, email, phone, message })
 		alert('Your message has been sent!')
         console.log('ok');
-	})
+	
 </script>
